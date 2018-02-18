@@ -1,12 +1,14 @@
 package com.kreezcraft.terracartreloaded;
 
+import org.apache.logging.log4j.Logger;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
@@ -14,7 +16,7 @@ import java.io.File;
 public class TerraCart {
     public static final String MODID = "terracart";
     public static final String MODNAME = "TerraCart";
-    public static final String VERSION = "1.11.2-3";
+    public static final String VERSION = "@VERSION@";
     public static Logger logger;
     public static Configuration config;
 
@@ -38,5 +40,8 @@ public class TerraCart {
             config.save();
         }
     }
-
+    @Mod.EventHandler
+	public void serverLoad(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandTC());
+    }
 }

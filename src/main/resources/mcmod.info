@@ -1,14 +1,14 @@
 [
 {
   "modid": "terracart",
-  "name": "TerraCart",
-  "description": "Don't stop me now! I'm having such a good time!",
+  "name": "TerraCart Reloaded",
+  "description": "Boomshakalaka!!! Right click any track and enjoy!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Lime"],
-  "credits": "Lime",
+  "authorList": ["Kreezxil","Lime"],
+  "credits": "Thanks to Lime for maintaining this from 1.7.10 thru 1.11.2. After a few months of no activity and no response I put the WTFPL license to use and recompiled it with some 1.12.2 porting changes.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

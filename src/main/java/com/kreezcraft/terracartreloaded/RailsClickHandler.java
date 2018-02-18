@@ -39,7 +39,7 @@ public class RailsClickHandler {
                 }
 
                 EntityMinecart cart;
-                if (Config.use_vanilla_cart){
+                if (Config.use_vanilla_cart.getBoolean()){
                     cart = new EntityMinecartEmpty(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D);
                 } else {
                     cart = new EntityTerraCart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D);
