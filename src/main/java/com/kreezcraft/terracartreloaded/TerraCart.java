@@ -19,12 +19,13 @@ public class TerraCart {
     public static final String VERSION = "@VERSION@";
     public static Logger logger;
     public static Configuration config;
-
+    public static File configFile,directory; 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
         TerraCart.logger = e.getModLog();
-        File directory = e.getModConfigurationDirectory();
-        config = new Configuration(new File(directory.getPath(), TerraCart.MODID+".cfg"));
+        directory = e.getModConfigurationDirectory();
+        configFile = new File(directory.getPath(), TerraCart.MODID+".cfg"); 
+        config = new Configuration(configFile);
         Config.readConfig();
     }
 
