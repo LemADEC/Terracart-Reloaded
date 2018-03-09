@@ -12,7 +12,7 @@ public class DismountHandler {
     public EnumActionResult onEvent(EntityMountEvent e)
     {
         World w = e.getWorldObj();
-        if (!w.isRemote && e.isDismounting() && e.getEntityBeingMounted() instanceof EntityMinecart) {
+        if (!w.isRemote && e.isDismounting() && e.getEntityBeingMounted() instanceof EntityTerraCart) {
             e.getEntityBeingMounted().setDead();
         }
 
