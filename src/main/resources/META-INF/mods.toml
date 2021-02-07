@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+issueTrackerURL="https://github.com/kreezxil/Terracart-Reloaded/issues"
+license="MIT"
+
+[[mods]]
+modId="terracart"
+version="${file.jarVersion}"
+displayName="TerraCart Reloaded"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/terracart-reloaded"
+authors="Kreezxil, Lime"
+description='''
+Boomshakalaka!!! Right click any track and enjoy!
+'''
+credits="Thanks to Lime for maintaining this from 1.7.10 thru 1.11.2. After a few months of no activity and no response I put the WTFPL license to use and recompiled it with some 1.12.2 porting changes."
