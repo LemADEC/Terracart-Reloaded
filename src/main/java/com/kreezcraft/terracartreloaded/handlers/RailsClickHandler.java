@@ -2,59 +2,63 @@ package com.kreezcraft.terracartreloaded.handlers;
 
 import com.kreezcraft.terracartreloaded.config.Config;
 import com.kreezcraft.terracartreloaded.entity.TerraCartEntity;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.properties.RailShape;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
+
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RailsClickHandler {
 	
 	@SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
-	public ActionResultType onEvent(PlayerInteractEvent.RightClickBlock event) {
-		World worldIn = event.getEntity().world;
+	public Event.Result onEvent(PlayerInteractEvent.RightClickBlock event) {
+		Level level = event.getEntity().level;
 		BlockPos pos = event.getPos();
-		PlayerEntity player = event.getPlayer();
-
-		BlockState iblockstate = worldIn.getBlockState(pos);
-
-		if (!AbstractRailBlock.isRail(iblockstate) || !(event.getEntity() instanceof PlayerEntity) || (!player.inventory.getCurrentItem().isEmpty())) {
-			return ActionResultType.FAIL;
-		} else {
-			if (!worldIn.isRemote) {
-				RailShape railShape = iblockstate
-						.getBlock() instanceof AbstractRailBlock
-								? ((AbstractRailBlock) iblockstate.getBlock()).getRailDirection(iblockstate, worldIn, pos,
-										null)
-								: RailShape.NORTH_SOUTH;
-				double d0 = 0.0D;
-
-				if (railShape.isAscending()) {
-					d0 = 0.5D;
-				}
-
-				AbstractMinecartEntity cart;
-				if (Config.COMMON.useVanillaCart.get()) {
-					cart = new MinecartEntity(worldIn, (double) pos.getX() + 0.5D,
-							(double) pos.getY() + 0.0625D + d0, (double) pos.getZ() + 0.5D);
-
-					cart.getPersistentData().putBoolean("terracart", true);
-				} else {
-					cart = new TerraCartEntity(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.0625D + d0,
-							(double) pos.getZ() + 0.5D);
-				}
-
-				worldIn.addEntity(cart);
-				player.startRiding(cart, true);
-			} 
-
-			return ActionResultType.SUCCESS;
+		Player player = event.getPlayer();
+		
+		BlockState blockstate = level.getBlockState(pos);
+		
+		if ( !BaseRailBlock.isRail(blockstate)
+		  || !(event.getEntity() instanceof Player)
+		  || !player.getMainHandItem().isEmpty() ) {
+			return Result.DENY;
 		}
-	}}
+		
+		if (!level.isClientSide) {
+			RailShape railShape = blockstate
+					.getBlock() instanceof BaseRailBlock
+							? ((BaseRailBlock) blockstate.getBlock()).getRailDirection(blockstate, level, pos, null)
+							: RailShape.NORTH_SOUTH;
+			double d0 = 0.0D;
+			
+			if (railShape.isAscending()) {
+				d0 = 0.5D;
+			}
+			
+			AbstractMinecart cart;
+			if (Config.COMMON.useVanillaCart.get()) {
+				cart = new Minecart(level, (double) pos.getX() + 0.5D,
+						(double) pos.getY() + 0.0625D + d0, (double) pos.getZ() + 0.5D);
+				
+				cart.getPersistentData().putBoolean("terracart", true);
+			} else {
+				cart = new TerraCartEntity(level, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.0625D + d0,
+						(double) pos.getZ() + 0.5D);
+			}
+			
+			level.addFreshEntity(cart);
+			player.startRiding(cart, true);
+		} 
+		
+		return Result.ALLOW;
+	}
+}
